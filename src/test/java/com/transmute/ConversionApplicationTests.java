@@ -1,4 +1,4 @@
-package com.transmute.conversion;
+package com.transmute;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
