@@ -46,7 +46,7 @@ public class DocxToPDFController {
                     .load(is);
             Docx4J.toHTML(wordMLPackage, "src/main/resources/assets", "src/main/resources/assets", out);
 
-            Path path = Paths.get("src/main/resources/static/test.html");
+            Path path = Paths.get("C:\\ui_be_projects\\transmute\\converted_documents\\test.html");
             Files.write(path, out.toByteArray());
 
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class DocxToPDFController {
 
 
         //set the location of chrome browser
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\bisho\\Downloads\\chromedriver_win32\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\chromedriver.exe");
 // Setting your Chrome options (Desired capabilities)
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
@@ -67,17 +67,17 @@ public class DocxToPDFController {
         WebDriver driver = new ChromeDriver(options);
 
         //navigate to url
-        driver.get("C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\test.html");
+        driver.get("C:\\ui_be_projects\\transmute\\converted_documents\\test.html");
 
         // capture screenshot and store the image
         Screenshot s = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-        ImageIO.write(s.getImage(), "PNG", new File("src/main/resources/static/test.png"));
+        ImageIO.write(s.getImage(), "PNG", new File("C:\\ui_be_projects\\transmute\\converted_documents\\test.png"));
 
         //closing the webdriver
         driver.close();
 
 
-        Image image = Image.getInstance("src/main/resources/static/test.png");
+        Image image = Image.getInstance("C:\\ui_be_projects\\transmute\\converted_documents\\test.png");
         image.scaleToFit(PageSize.A0);
         //Get Size of Original Image for conversion
         float origWidth = image.getWidth();
@@ -89,7 +89,7 @@ public class DocxToPDFController {
         Rectangle rectangle = new Rectangle(origWidth, origHeight);
 
         Document document = new Document(PageSize.A4, 10, 10, 10, 10);
-        PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/static/test.pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream("C:\\ui_be_projects\\transmute\\converted_documents\\test.pdf"));
         document.open();
         //Set page size before adding new page
         document.setPageSize(rectangle);
