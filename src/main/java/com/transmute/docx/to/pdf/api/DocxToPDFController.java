@@ -4,9 +4,11 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.transmute.docx.to.pdf.DocxToPDF;
 import org.docx4j.Docx4J;
+import org.docx4j.convert.out.HTMLSettings;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,17 +37,22 @@ public class DocxToPDFController {
     }
 
     @PostMapping("/convertToPDF")
-    public ResponseEntity<byte[]> responseEntity(@RequestParam("file") MultipartFile[] files) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> responseEntity(@RequestParam("file") MultipartFile[] files) throws IOException, DocumentException, ParserConfigurationException {
         byte[] fileContent = Arrays.stream(files).findFirst().get().getBytes();
 
         InputStream is = new BufferedInputStream(new ByteArrayInputStream(fileContent));
+
 
         byte[] pdfDocBytes = new byte[0];
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
                     .load(is);
-            Docx4J.toHTML(wordMLPackage, "src/main/resources/assets", "src/main/resources/assets", out);
+            HTMLSettings htmlSettings = Docx4J.createHTMLSettings();
+            htmlSettings.setImageDirPath("C:\\ui_be_projects\\transmute\\converted_documents\\");
+            htmlSettings.setWmlPackage(wordMLPackage);
+
+            Docx4J.toHTML(htmlSettings, out, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
             Path path = Paths.get("C:\\ui_be_projects\\transmute\\converted_documents\\test.html");
             Files.write(path, out.toByteArray());
@@ -56,12 +64,27 @@ public class DocxToPDFController {
 
         //set the location of chrome browser
         System.setProperty("webdriver.chrome.driver", "C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.whitelistedIps", "");
+        System.setProperty("--allowed-ips", "");
+
+
 // Setting your Chrome options (Desired capabilities)
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        options.addArguments("--start-fullscreen");
+        //options.addArguments("--no-sandbox"); // Bypass OS security model
         options.addArguments("--headless");
+        //options.addArguments("--start-maximized");
+        options.addArguments("--start-fullscreen");
         options.addArguments("--hide-scrollbars");
+        options.addArguments("disable-infobars"); // disabling infobars
+        options.addArguments("--disable-extensions"); // disabling extensions
+        options.addArguments("--disable-gpu"); // applicable to windows os only*/
+        options.addArguments("--window-size=1100x1100");
+
+        //options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        //options.addArguments("--remote-debugging-port=9222");
+
+        options.setBinary(new File("C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\Application\\chrome.exe"));
+        ChromeDriverService.createServiceWithConfig(options);
 
         // Initialize browser
         WebDriver driver = new ChromeDriver(options);
