@@ -70,9 +70,9 @@ public class DocxToPDFController {
 
 // Setting your Chrome options (Desired capabilities)
         ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--no-sandbox"); // Bypass OS security model
+        options.addArguments("--no-sandbox"); // Bypass OS security model
         options.addArguments("--headless");
-        //options.addArguments("--start-maximized");
+        options.addArguments("--start-maximized");
         options.addArguments("--start-fullscreen");
         options.addArguments("--hide-scrollbars");
         options.addArguments("disable-infobars"); // disabling infobars
@@ -80,8 +80,8 @@ public class DocxToPDFController {
         options.addArguments("--disable-gpu"); // applicable to windows os only*/
         options.addArguments("--window-size=1100x1100");
 
-        //options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-        //options.addArguments("--remote-debugging-port=9222");
+        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        options.addArguments("--remote-debugging-port=9222");
 
         options.setBinary(new File("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"));
         ChromeDriverService.createServiceWithConfig(options);
