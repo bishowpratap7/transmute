@@ -54,7 +54,7 @@ public class DocxToPDFController {
 
             Docx4J.toHTML(htmlSettings, out, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
-            Path path = Paths.get("C:\\ui_be_projects\\transmute\\converted_documents\\test.html");
+            Path path = Paths.get("C:\\ui_be_projects\\transmute\\test.html");
             Files.write(path, out.toByteArray());
 
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class DocxToPDFController {
         //options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
         //options.addArguments("--remote-debugging-port=9222");
 
-        options.setBinary(new File("C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\Application\\chrome.exe"));
+        options.setBinary(new File("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"));
         ChromeDriverService.createServiceWithConfig(options);
 
         // Initialize browser
@@ -94,13 +94,13 @@ public class DocxToPDFController {
 
         // capture screenshot and store the image
         Screenshot s = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-        ImageIO.write(s.getImage(), "PNG", new File("C:\\ui_be_projects\\transmute\\converted_documents\\test.png"));
+        ImageIO.write(s.getImage(), "PNG", new File("C:\\ui_be_projects\\transmute\\test.png"));
 
         //closing the webdriver
         driver.close();
 
 
-        Image image = Image.getInstance("C:\\ui_be_projects\\transmute\\converted_documents\\test.png");
+        Image image = Image.getInstance("C:\\ui_be_projects\\transmute\\test.png");
         image.scaleToFit(PageSize.A0);
         //Get Size of Original Image for conversion
         float origWidth = image.getWidth();
@@ -112,7 +112,7 @@ public class DocxToPDFController {
         Rectangle rectangle = new Rectangle(origWidth, origHeight);
 
         Document document = new Document(PageSize.A4, 10, 10, 10, 10);
-        PdfWriter.getInstance(document, new FileOutputStream("C:\\ui_be_projects\\transmute\\converted_documents\\test.pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream("C:\\ui_be_projects\\transmute\\test.pdf"));
         document.open();
         //Set page size before adding new page
         document.setPageSize(rectangle);
