@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 @RestController
 public class DocxToPDFController {
@@ -61,6 +62,7 @@ public class DocxToPDFController {
             e.printStackTrace();
         }
 
+        WebDriverManager.chromedriver().setup();
 
         //set the location of chrome browser
         System.setProperty("webdriver.chrome.driver", "C:\\ui_be_projects\\transmute\\src\\main\\resources\\static\\chromedriver.exe");
@@ -68,7 +70,7 @@ public class DocxToPDFController {
         System.setProperty("--allowed-ips", "");
 
 
-// Setting your Chrome options (Desired capabilities)
+        // Setting your Chrome options (Desired capabilities)
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox"); // Bypass OS security model
         options.addArguments("--headless");
@@ -83,14 +85,13 @@ public class DocxToPDFController {
         options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
         options.addArguments("--remote-debugging-port=9222");
 
-        options.setBinary(new File("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"));
         ChromeDriverService.createServiceWithConfig(options);
 
         // Initialize browser
-        WebDriver driver = new ChromeDriver(options);
+        ChromeDriver driver = new ChromeDriver(options);
 
         //navigate to url
-        driver.get("C:\\ui_be_projects\\transmute\\converted_documents\\test.html");
+        driver.get("C:\\ui_be_projects\\transmute\\test.html");
 
         // capture screenshot and store the image
         Screenshot s = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
