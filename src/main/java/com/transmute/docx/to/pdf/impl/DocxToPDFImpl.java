@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.transmute.docx.to.pdf.DocxToPDF;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.docx4j.Docx4J;
 import org.docx4j.convert.out.HTMLSettings;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -23,6 +24,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class DocxToPDFImpl implements DocxToPDF {
@@ -45,25 +48,22 @@ public class DocxToPDFImpl implements DocxToPDF {
     private String staticTempPath;
 
     @Override
-    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, URISyntaxException, InterruptedException {
+    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException {
         byte[] fileContent = Arrays.stream(files).findFirst().get().getBytes();
 
-        InputStream is = new BufferedInputStream(new ByteArrayInputStream(fileContent));
+        InputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(fileContent));
 
-
-        byte[] pdfDocBytes = new byte[0];
-
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream htmlOut = new ByteArrayOutputStream()) {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
-                    .load(is);
+                    .load(bufferedInputStream);
             HTMLSettings htmlSettings = Docx4J.createHTMLSettings();
             htmlSettings.setImageDirPath(docx4jHtmlTempPath);
             htmlSettings.setWmlPackage(wordMLPackage);
 
-            Docx4J.toHTML(htmlSettings, out, Docx4J.FLAG_EXPORT_PREFER_XSL);
+            Docx4J.toHTML(htmlSettings, htmlOut, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
             Path path = Paths.get(tempHtmlPath);
-            Files.write(path, out.toByteArray());
+            Files.write(path, htmlOut.toByteArray());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +100,9 @@ public class DocxToPDFImpl implements DocxToPDF {
         Rectangle rectangle = new Rectangle(origWidth, origHeight);
 
         Document document = new Document(PageSize.A4, 10, 10, 10, 10);
-        PdfWriter.getInstance(document, new FileOutputStream(saveConvertedPdfPath));
+
+        ByteArrayOutputStream pdfOut = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, pdfOut);
         document.open();
         //Set page size before adding new page
         document.setPageSize(rectangle);
@@ -108,13 +110,25 @@ public class DocxToPDFImpl implements DocxToPDF {
         document.add(image);
         document.close();
         FileUtils.cleanDirectory(new File(staticTempPath));
-        return null;
+        if (saveAsFile) {
+            DateTimeFormatter timeStampPattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            Files.write(Path.of(saveConvertedPdfPath + timeStampPattern.format(LocalDateTime.now()) + ".pdf"), pdfOut.toByteArray());
+
+        }
+        return pdfOut.toByteArray();
+
     }
 
     private ChromeOptions chromeOptions() {
 
         //set the location of chrome browser
-        System.setProperty("webdriver.chrome.driver", windowsDefaultChromeDriverPath);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            System.setProperty("webdriver.chrome.driver", windowsDefaultChromeDriverPath);
+        } else if (SystemUtils.IS_OS_LINUX) {
+            System.setProperty("webdriver.chrome.driver", linuxDefaultChromeDriverPath);
+        } else {
+            throw new RuntimeException("OPERATING SYSTEM NOT SUPPORTED YET.");
+        }
         System.setProperty("webdriver.chrome.whitelistedIps", "");
         System.setProperty("--allowed-ips", "");
 

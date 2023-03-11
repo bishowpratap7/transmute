@@ -22,9 +22,9 @@ public class DocxToPDFController {
 
 
     @PostMapping("/convertToPDF")
-    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, ParserConfigurationException, URISyntaxException, InterruptedException {
+    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, @RequestParam("saveAsFile") boolean saveAsFile) throws IOException, DocumentException, ParserConfigurationException, URISyntaxException, InterruptedException {
 
-        return docxToPDF.wordToPdfBytes(files, saveAsFile, saveAsByteArray);
+        return docxToPDF.wordToPdfBytes(files, saveAsFile);
 
     }
 
