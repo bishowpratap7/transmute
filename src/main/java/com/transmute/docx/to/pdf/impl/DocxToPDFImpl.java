@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.transmute.docx.to.pdf.DocxToPDF;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.docx4j.Docx4J;
 import org.docx4j.convert.out.HTMLSettings;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -40,6 +41,8 @@ public class DocxToPDFImpl implements DocxToPDF {
     @Value("${chrome.specific.url}")
     private String chromeSpecificUrl;
 
+    @Value("${static.temp.path}")
+    private String staticTempPath;
 
     @Override
     public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, URISyntaxException, InterruptedException {
@@ -104,6 +107,7 @@ public class DocxToPDFImpl implements DocxToPDF {
         document.newPage();
         document.add(image);
         document.close();
+        FileUtils.cleanDirectory(new File(staticTempPath));
         return null;
     }
 
