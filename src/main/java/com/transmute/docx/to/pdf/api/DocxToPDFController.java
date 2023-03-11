@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @RestController
 public class DocxToPDFController {
@@ -21,7 +22,7 @@ public class DocxToPDFController {
 
 
     @PostMapping("/convertToPDF")
-    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, ParserConfigurationException {
+    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, ParserConfigurationException, URISyntaxException, InterruptedException {
 
         return docxToPDF.wordToPdfBytes(files, saveAsFile, saveAsByteArray);
 

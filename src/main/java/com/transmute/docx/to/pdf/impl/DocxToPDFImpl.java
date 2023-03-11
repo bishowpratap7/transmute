@@ -18,13 +18,13 @@ import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class DocxToPDFImpl implements DocxToPDF {
-
     @Value("${windows.default.chrome.driver.path}")
     private String windowsDefaultChromeDriverPath;
     @Value("${linux.default.chrome.driver.path}")
@@ -37,9 +37,12 @@ public class DocxToPDFImpl implements DocxToPDF {
     private String docx4jHtmlTempPath;
     @Value("${save.converted.pdf.path}")
     private String saveConvertedPdfPath;
+    @Value("${chrome.specific.url}")
+    private String chromeSpecificUrl;
+
 
     @Override
-    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException {
+    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException, URISyntaxException, InterruptedException {
         byte[] fileContent = Arrays.stream(files).findFirst().get().getBytes();
 
         InputStream is = new BufferedInputStream(new ByteArrayInputStream(fileContent));
@@ -72,7 +75,7 @@ public class DocxToPDFImpl implements DocxToPDF {
         ChromeDriver driver = new ChromeDriver(chromeOptions());
 
         //navigate to url
-        driver.get(tempHtmlPath);
+        driver.get(chromeSpecificUrl);
 
         // capture screenshot and store the image
         Screenshot s = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
