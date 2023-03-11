@@ -21,9 +21,9 @@ public class DocxToPDFController {
 
 
     @PostMapping("/convertToPDF")
-    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, @RequestParam("saveAsFile") boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException {
+    public byte[] responseEntity(@RequestParam("file") MultipartFile[] files, @RequestParam(value = "fileAsBytes", required = false) byte[] fileAsBytes, @RequestParam(value = "saveAsFile", required = false) boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException {
 
-        return docxToPDF.wordToPdfBytes(files, saveAsFile);
+        return docxToPDF.wordToPdfBytes(files, fileAsBytes, saveAsFile);
 
     }
 

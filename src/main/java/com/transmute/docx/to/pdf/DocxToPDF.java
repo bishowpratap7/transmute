@@ -8,6 +8,6 @@ import java.net.URISyntaxException;
 
 public interface DocxToPDF {
 
-    byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException;
+    byte[] wordToPdfBytes(MultipartFile[] files, byte[] fileAsBytes, boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException;
 
 }

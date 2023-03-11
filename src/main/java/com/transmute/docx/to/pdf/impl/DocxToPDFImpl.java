@@ -47,9 +47,15 @@ public class DocxToPDFImpl implements DocxToPDF {
     private String staticTempPath;
 
     @Override
-    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile) throws IOException, DocumentException {
+    public byte[] wordToPdfBytes(MultipartFile[] files, byte[] fileAsBytes, boolean saveAsFile) throws IOException, DocumentException {
+        byte[] fileContent;
 
-        byte[] fileContent = Arrays.stream(files).findFirst().get().getBytes();
+        if (fileAsBytes != null && fileAsBytes.length > 0) {
+            fileContent = fileAsBytes;
+        } else {
+            //TODO: Check for no files.
+            fileContent = Arrays.stream(files).findFirst().get().getBytes();
+        }
 
         InputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(fileContent));
 
@@ -121,6 +127,7 @@ public class DocxToPDFImpl implements DocxToPDF {
         } else if (SystemUtils.IS_OS_LINUX) {
             System.setProperty("webdriver.chrome.driver", linuxDefaultChromeDriverPath);
         } else {
+            //TODO : Need to throw dedicated Exception - TransmuteNoOperatingSystemException
             throw new RuntimeException("OPERATING SYSTEM NOT SUPPORTED YET.");
         }
 
