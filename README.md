@@ -1,8 +1,7 @@
 # Transmute
 
 This is an open source project designed to help community with 100% free conversions of word docx containing foreign
-languages to
-PDF for FREE. No need to install fonts on your machine and at the same time preserve the formatting.
+languages to PDF for FREE. No need to install fonts on your machine and at the same time preserve the formatting.
 This project is suitable for both personal and enterprise use.
 
 With Transmute we can:

@@ -12,9 +12,9 @@
     <artifactId>transmute</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>conversion</name>
-    <description># Transmute This is an one source project designed to help community with 100% free conversions of any
-        documents such as DOCX to PDF, TXT to PDF, PDF to IMAGE and more to come as we build this project. We will make
-        sure that this project will be suitable for both personal and enterprise use.
+    <description>This is an open source project designed to help community with 100% free conversions of word docx containing foreign
+        languages to PDF for FREE. No need to install fonts on your machine and at the same time preserve the formatting.
+        This project is suitable for both personal and enterprise use.
     </description>
     <properties>
         <java.version>11</java.version>
@@ -27,7 +27,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -44,13 +43,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-chrome-driver</artifactId>
             <version>4.7.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
@@ -66,20 +63,16 @@
             <artifactId>selenium-devtools-v108</artifactId>
             <version>4.7.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5 -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
             <version>5.2.1</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot -->
         <dependency>
             <groupId>ru.yandex.qatools.ashot</groupId>
             <artifactId>ashot</artifactId>
             <version>1.5.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>

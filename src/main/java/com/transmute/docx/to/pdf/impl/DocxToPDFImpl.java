@@ -48,7 +48,8 @@ public class DocxToPDFImpl implements DocxToPDF {
     private String staticTempPath;
 
     @Override
-    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile) throws IOException, DocumentException, URISyntaxException, InterruptedException {
+    public byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile) throws IOException, DocumentException {
+
         byte[] fileContent = Arrays.stream(files).findFirst().get().getBytes();
 
         InputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(fileContent));
@@ -66,18 +67,13 @@ public class DocxToPDFImpl implements DocxToPDF {
             Files.write(path, htmlOut.toByteArray());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //IGNORE
         }
 
+        //Initialize Chromedriver.
         WebDriverManager.chromedriver().setup();
-
-
         ChromeDriverService.createServiceWithConfig(chromeOptions());
-
-        // Initialize browser
         ChromeDriver driver = new ChromeDriver(chromeOptions());
-
-        //navigate to url
         driver.get(chromeSpecificUrl);
 
         // capture screenshot and store the image
@@ -86,7 +82,6 @@ public class DocxToPDFImpl implements DocxToPDF {
 
         //closing the webdriver
         driver.close();
-
 
         Image image = Image.getInstance(tempPngPath);
         image.scaleToFit(PageSize.A0);
@@ -109,12 +104,12 @@ public class DocxToPDFImpl implements DocxToPDF {
         document.newPage();
         document.add(image);
         document.close();
-        FileUtils.cleanDirectory(new File(staticTempPath));
         if (saveAsFile) {
             DateTimeFormatter timeStampPattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
             Files.write(Path.of(saveConvertedPdfPath + timeStampPattern.format(LocalDateTime.now()) + ".pdf"), pdfOut.toByteArray());
 
         }
+        FileUtils.cleanDirectory(new File(staticTempPath));
         return pdfOut.toByteArray();
 
     }
@@ -129,24 +124,23 @@ public class DocxToPDFImpl implements DocxToPDF {
         } else {
             throw new RuntimeException("OPERATING SYSTEM NOT SUPPORTED YET.");
         }
+
+        // Setting your Chrome options. #TODO : Move to application.properties on weekend
         System.setProperty("webdriver.chrome.whitelistedIps", "");
         System.setProperty("--allowed-ips", "");
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model
+        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--start-maximized");
+        chromeOptions.addArguments("--start-fullscreen");
+        chromeOptions.addArguments("--hide-scrollbars");
+        chromeOptions.addArguments("disable-infobars"); // disabling infobars
+        chromeOptions.addArguments("--disable-extensions"); // disabling extensions
+        chromeOptions.addArguments("--disable-gpu"); // applicable to windows os only*/
+        chromeOptions.addArguments("--window-size=1100x1100");
+        chromeOptions.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        chromeOptions.addArguments("--remote-debugging-port=9222");
 
-        // Setting your Chrome options (Desired capabilities)
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox"); // Bypass OS security model
-        options.addArguments("--headless");
-        options.addArguments("--start-maximized");
-        options.addArguments("--start-fullscreen");
-        options.addArguments("--hide-scrollbars");
-        options.addArguments("disable-infobars"); // disabling infobars
-        options.addArguments("--disable-extensions"); // disabling extensions
-        options.addArguments("--disable-gpu"); // applicable to windows os only*/
-        options.addArguments("--window-size=1100x1100");
-
-        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-        options.addArguments("--remote-debugging-port=9222");
-
-        return options;
+        return chromeOptions;
     }
 }
