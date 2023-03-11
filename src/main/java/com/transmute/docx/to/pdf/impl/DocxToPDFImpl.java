@@ -27,6 +27,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+/**
+ * The {@code DocxToPDFImpl} is the implementation class to convert DOCX to PDF.
+ * This takes MultipartFile, byte[] and an option to save the converted PDF as file.
+ *
+ * @author Bishow Pandey
+ * @since 0.0.1-SNAPSHOT
+ */
 public class DocxToPDFImpl implements DocxToPDF {
     @Value("${windows.default.chrome.driver.path}")
     private String windowsDefaultChromeDriverPath;

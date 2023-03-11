@@ -10,6 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+/**
+ * The {@code DocxToPDFController} class represents the Controller layer and is in a REST form.
+ * This takes MultipartFile, byte[] and an option to save the converted PDF as file.
+ *
+ * @author Bishow Pandey
+ * @since 0.0.1-SNAPSHOT
+ */
 @RestController
 public class DocxToPDFController {
     private final DocxToPDF docxToPDF;
