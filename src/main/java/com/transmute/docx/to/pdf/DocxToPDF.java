@@ -1,11 +1,12 @@
 package com.transmute.docx.to.pdf;
 
+import com.itextpdf.text.DocumentException;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface DocxToPDF {
 
-    byte[] wordToPdfBytes(byte[] bytesOfWordDocx);
-
-    byte[] readDocxFile(MultipartFile multipartDocxFile);
+    byte[] wordToPdfBytes(MultipartFile[] files, boolean saveAsFile, boolean saveAsByteArray) throws IOException, DocumentException;
 
 }
