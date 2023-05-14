@@ -1,1 +1,1 @@
-This is an open source project designed to help community with 100% free conversions of Micorsoft Word (DOCX) to PDF that has non-english characters. We will work on making sure that this project will be suitable for both personal and enterprise use.
+This is an open source project designed to help community with 100% free conversions of Microsoft Word (DOCX) to PDF that has non-English characters (Foreign Languages). We will work on making sure that this project will be suitable for both personal and enterprise use.
