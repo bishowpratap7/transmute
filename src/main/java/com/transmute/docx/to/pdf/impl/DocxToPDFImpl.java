@@ -128,6 +128,9 @@ public class DocxToPDFImpl implements DocxToPDF {
 
     private ChromeOptions chromeOptions() {
 
+
+        //TODO : Everytime there is a newer version of chrome driver we are getting SessionNotCreatedException. Need a mechanism to handle this scenario.
+
         //set the location of chrome browser
         if (SystemUtils.IS_OS_WINDOWS) {
             System.setProperty("webdriver.chrome.driver", windowsDefaultChromeDriverPath);
