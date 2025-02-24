@@ -14,6 +14,17 @@ RUN echo "🚀 Starting LibreOffice installation process..."
 # Ensure LibreOffice is installed
 RUN apt-get update && apt-get install -y libreoffice && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    fonts-noto \
+    fonts-noto-cjk \
+    fonts-arphic-ukai \
+    fonts-arphic-uming \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
+    fonts-unfonts-core \
+    && apt-get clean
+
 # Verify LibreOffice installation
 RUN echo "🛠 Checking LibreOffice version..." && command -v libreoffice && libreoffice --version
 
